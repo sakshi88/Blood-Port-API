@@ -1,0 +1,19 @@
+{
+  "name": "bport_login",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mysql2": "^1.3.5",
+    "nodemailer": "^4.0.1",
+    "nodemailer-wellknown": "^0.2.3",
+    "sequelize": "^4.2.1"
+  }
+}
