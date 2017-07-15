@@ -18,7 +18,6 @@ app.get('/',(req,res)=>
 {
 	res.send("Response OK");
 });
-//app.use('/register',require('./models/user_signup.js'))
 app.use('/register',require('./models/patient.js'));
 
 app.listen(8080,function(){

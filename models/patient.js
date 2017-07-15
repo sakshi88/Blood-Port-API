@@ -38,6 +38,36 @@ signUp=connection.seq.define('signUp',{
 
 signUp.sync();
 
+//for Checking whether email existes in db 
+router.post('/check',function(req,res){
+    data_body=req.body.user_email;
+    var exists=false;
+    signUp.find({
+        where:{
+          user_email:data_body.user_email  
+        }
+    }).then((signUp)=>{
+        if(signUp)
+        {
+            exists=true;
+        }
+        else
+        {
+            exists=false;
+        }
+    }).then(()=>{
+        if(exists)
+        {
+            res.send(true);
+        }
+        else
+        {
+            res.send(false);
+        }
+    })
+})
+
+
 //for submitting details
 router.post('/signup',(req,res)=>{
 	data_body=req.body;
