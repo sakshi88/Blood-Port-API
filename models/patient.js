@@ -7,27 +7,43 @@ var router = require('express').Router(),
 
 
 signUp=connection.seq.define('signUp',{
+    blood_id:{
+        type: sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
 	user_name:{
 		type:sequelize.STRING,
-		allowNUll:false,
-	},
-	user_mobile_no:{
-		type:sequelize.INTEGER,
 		allowNUll:false,
 	},
 	user_email:{
 		type:sequelize.STRING,
 		allowNUll:false,
 	},
-
-	user_password:{
-		type:sequelize.STRING,
-		allowNUll:false,
-	},
-	user_confirm_password:{
-		type:sequelize.STRING,
-		allowNUll:false,
-	}
+    user_mobile_no:{
+        type:sequelize.STRING,
+        allowNUll:false,
+    },
+    user_blood_grp:{
+        type: sequelize.STRING,
+        allowNUll: false
+    },
+    user_dob:{
+        type:sequelize.DATEONLY,
+        allowNUll:false
+    },
+    user_gender:{
+        type:sequelize.STRING,
+        allowNUll:false
+    },
+    user_password:{
+        type:sequelize.STRING,
+        allowNUll:false,
+    },
+    user_confirm_password:{
+        type:sequelize.STRING,
+        allowNUll:false,
+    }
 },
 {
 	freezeTableName:true,
@@ -40,31 +56,34 @@ signUp.sync();
 
 //for Checking whether email existes in db 
 router.post('/check',function(req,res){
-    data_body=req.body.user_email;
-    var exists=false;
+    data_body=req.body;
     signUp.find({
         where:{
           user_email:data_body.user_email  
         }
     }).then((signUp)=>{
+        var exists=false;
         if(signUp)
         {
             exists=true;
+            console.log(signUp);
+            res.send(exists);
         }
         else
         {
             exists=false;
+            res.send(exists);
         }
-    }).then(()=>{
+    })/*.then(()=>{
         if(exists)
         {
-            res.send(true);
+            res.send("true");
         }
         else
         {
-            res.send(false);
+            res.send("false");
         }
-    })
+    })*/
 })
 
 
@@ -79,57 +98,74 @@ router.post('/signup',(req,res)=>{
 			user_email:data_body.user_email
 		}
 	}).then((signUp)=>{
+        console.log("signup "+ signUp)
 		if(signUp)
 		{
 			check=false;
+            console.log("value of check :"+check);
 		}
 		else
 		{
 			check=true;
+            console.log("value of check :"+check);
 		}
 	}).then(()=>{
 		if(check)
 		{
 			if(data_body.user_password==data_body.user_confirm_password)
 			{
+                var created=false;
 				signUp.create
 				({
 					user_name:data_body.user_name,
+                    user_email:data_body.user_email,
 					user_mobile_no:data_body.user_mobile_no,
-					user_email:data_body.user_email,
+					user_blood_grp: data_body.user_blood_grp,
+                    user_dob: data_body.user_dob,
+                    user_gender: data_body.user_gender,
 					user_password:data_body.user_password,
 					user_confirm_password:data_body.user_confirm_password
-				});
-				var transporter=nodemailer.createTransport({
-					service:'Gmail',
-					auth:{
-						user:'shourya301996@gmail.com',
-						pass:'secureme'
-					}
-				});
+				}).then(function(signUp){
+                    created=true;
+                    if(created)
+                    {
+                        var transporter=nodemailer.createTransport({
+                            service:'Gmail',
+                            auth:{
+                            user:'shourya301996@gmail.com',
+                            pass:'secureme'
+                        }
+                        });
 
-				var mailOptions={
-					from:'shourya301996@gmail.com',
-					to:data_body.user_email,
-					subject:'Mail from Bloodport for successful signup',
-					html:'<h1>Hello User, You have been registered with Bloodport</h1>'
-				};
-				transporter.sendMail(mailOptions,function(error,info){
-					if(error)
-					{
-						console.log(error);
-					}
-					else
-					{
-						console.log("mail sent");
-					}
-				});
-
-				res.send("You have been successfully registered to BloodPORT");
+                        var mailOptions={
+                            from:'shourya301996@gmail.com',
+                            to:data_body.user_email,
+                            subject:'Mail from Bloodport for successful signup',
+                            html:'<h1>Hello User, You have been registered with Bloodport</h1>'
+                        };
+                
+                        transporter.sendMail(mailOptions,function(error,info){
+                            if(error)
+                            {
+                                console.log(error);
+                            }
+                            else
+                            {
+                                console.log("mail sent");
+                            }
+                        });
+                        res.send("You have been successfully registered to BloodPORT");
+                    }
+                    else
+                    {
+                        console.log(2374);
+                        res.send("Some fields were wrong, Please re-enter!!!!");
+                    }    
+                })	
 			}
 			else
 			{
-				res.send("Password and Confirm Password doesnt match!, Please re-neter password!");
+				res.send("Password and Confirm Password doesnt match!, Please re-enter password!");
 			}	
 		}
 		else
@@ -137,7 +173,6 @@ router.post('/signup',(req,res)=>{
 			console.log("E-mail Id " +data_body.user_email+" already exists!!, Sorry Can't signup!");
 			res.send("E-mail Id " +data_body.user_email+" already exists!!, Please signup with a different email");
 		}
-
 	})
 })
 
@@ -159,6 +194,7 @@ router.post('/login_user',function(req,res){
             {
                 found=true;
                 console.log("you are logged in");
+                //res.send(true);
                 res.send("User has been successfully logged in");
             }
             else{
