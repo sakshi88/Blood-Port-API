@@ -62,20 +62,7 @@ router.post('/check',function(req,res){
           user_email:data_body.user_email  
         }
     }).then((signUp)=>{
-        var exists=false;
         if(signUp)
-        {
-            exists=true;
-            console.log(signUp);
-            res.send(exists);
-        }
-        else
-        {
-            exists=false;
-            res.send(exists);
-        }
-    })/*.then(()=>{
-        if(exists)
         {
             res.send("true");
         }
@@ -83,105 +70,58 @@ router.post('/check',function(req,res){
         {
             res.send("false");
         }
-    })*/
+    })
 })
 
 
 //for submitting details
 router.post('/signup',(req,res)=>{
-	data_body=req.body;
-	console.log(data_body);
-	var check=false;
-	
-	signUp.find({
-		where:{
-			user_email:data_body.user_email
-		}
-	}).then((signUp)=>{
-        console.log("signup "+ signUp)
-		if(signUp)
-		{
-			check=false;
-            console.log("value of check :"+check);
-		}
-		else
-		{
-			check=true;
-            console.log("value of check :"+check);
-		}
-	}).then(()=>{
-		if(check)
-		{
-			if(data_body.user_password==data_body.user_confirm_password)
-			{
-                var created=false;
-				signUp.create
-				({
-					user_name:data_body.user_name,
-                    user_email:data_body.user_email,
-					user_mobile_no:data_body.user_mobile_no,
-					user_blood_grp: data_body.user_blood_grp,
-                    user_dob: data_body.user_dob,
-                    user_gender: data_body.user_gender,
-					user_password:data_body.user_password,
-					user_confirm_password:data_body.user_confirm_password
-				}).then(function(signUp){
-                    created=true;
-                    if(created)
-                    {
-                        var transporter=nodemailer.createTransport({
-                            service:'Gmail',
-                            auth:{
-                            user:'shourya301996@gmail.com',
-                            pass:'secureme'
-                        }
-                        });
+    data_body=req.body;
+    console.log(data_body);
+    signUp.create({
+    user_name:data_body.user_name,
+    user_email:data_body.user_email,
+    user_mobile_no:data_body.user_mobile_no,
+    user_blood_grp: data_body.user_blood_grp,
+    user_dob: data_body.user_dob,
+    user_gender: data_body.user_gender,
+    user_password:data_body.user_password,
+    user_confirm_password:data_body.user_confirm_password
 
-                        var mailOptions={
-                            from:'shourya301996@gmail.com',
-                            to:data_body.user_email,
-                            subject:'Mail from Bloodport for successful signup',
-                            html:'<h1>Hello User, You have been registered with Bloodport</h1>'
-                        };
+    }).then(function(signUp){
+        var transporter=nodemailer.createTransport({
+            service:'Gmail',
+            auth:{
+            user:'shourya301996@gmail.com',
+            pass:'secureme'
+            }
+        });
+
+         var mailOptions={
+            from:'shourya301996@gmail.com',
+            to:data_body.user_email,
+            subject:'Mail from Bloodport for successful signup',
+            html:'<h1>Hello User, You have been registered with Bloodport</h1>'
+            };
                 
-                        transporter.sendMail(mailOptions,function(error,info){
-                            if(error)
-                            {
-                                console.log(error);
-                            }
-                            else
-                            {
-                                console.log("mail sent");
-                            }
-                        });
-                        res.send("You have been successfully registered to BloodPORT");
-                    }
-                    else
-                    {
-                        console.log(2374);
-                        res.send("Some fields were wrong, Please re-enter!!!!");
-                    }    
-                })	
-			}
-			else
-			{
-				res.send("Password and Confirm Password doesnt match!, Please re-enter password!");
-			}	
-		}
-		else
-		{
-			console.log("E-mail Id " +data_body.user_email+" already exists!!, Sorry Can't signup!");
-			res.send("E-mail Id " +data_body.user_email+" already exists!!, Please signup with a different email");
-		}
-	})
-})
+        transporter.sendMail(mailOptions,function(error,info){
+            if(error)
+                {
+                    console.log(error);
+                }
+                else
+                {
+                    console.log("mail sent");
+                }
+        });
+        res.send("You have been successfully registered to BloodPORT");
+    })   
+});
+
 
 //for log in the user
 router.post('/login_user',function(req,res){
     data_body=req.body;
-    var found =false;
-    console.log("checking details");
-
     signUp.find({
         where:{
             user_email: data_body.user_email
@@ -189,26 +129,22 @@ router.post('/login_user',function(req,res){
     }).then(function(signUp){
         if(signUp)
         {
-            console.log("user found");
             if(signUp.user_password==data_body.user_password)
-            {
-                found=true;
+            {   
+                res.send("true");
                 console.log("you are logged in");
-                //res.send(true);
-                res.send("User has been successfully logged in");
             }
-            else{
-                found=false;
-                res.send("Password Doesn't match, Please enter a correct pasword");
+            else
+            {
+                res.send("Invalid Password");  
             }
         }
-        else{
-            found=false;
+        else
+        {
             res.send("You are not Registered with BlooPORT, Please SignUp first!!!");
         }
     });
 });
-
 //when the user forgets password
 router.post('/forgotpassword',function(req,res){
     data_body=req.body;
