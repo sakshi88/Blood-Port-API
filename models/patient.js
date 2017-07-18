@@ -302,4 +302,44 @@ router.post('/updatePassword',function(req,res){
     }
 })
 
+
+//api for user profile section
+
+router.post('/get_details',function(req,res){
+    data_body=req.body;
+
+    signUp.find({
+        where:{
+            user_email: data_body.user_email
+        }
+    }).then(function(signUp){
+        console.log(signUp);
+        res.send(signUp);
+    })
+});
+
+router.post('/update_details',function(req,res){
+    data_body=req.body;
+
+    signUp.find({
+        where: {
+            user_email: data_body.user_email
+        }
+    }).then(function(signUp){
+        console.log("updating details of "+data_body.user_email+" user");
+
+        signUp.update({
+            user_name: data_body.user_name,
+            user_blood_grp: data_body.user_blood_grp,
+            user_email: data_body.user_email,
+            user_mobile_no: data_body.user_mobile_no,
+            user_dob: data_body.user_dob,
+            user_gender: data_body.user_gender
+        }).then(function(signUp){
+            console.log("fields updated");
+            res.send(signUp);
+        })
+    })
+});
+
 module.exports=router;

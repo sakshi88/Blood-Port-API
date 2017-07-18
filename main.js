@@ -20,6 +20,9 @@ app.get('/',(req,res)=>
 });
 app.use('/register',require('./models/patient.js'));
 
+/* api for dashboard*/
+app.use('/dashboard',require('./models/dasboard.js'));
+
 app.listen(8080,function(){
     console.log("server listening at port 8080");
 })
