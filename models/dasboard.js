@@ -36,11 +36,11 @@ var patient=connection.seq.define('patient',{
         //allowNull: false,
         type: sequelize.BLOB('long')
     },
-    
+    */
     cost:{
         type: sequelize.FLOAT,
         allowNull: true
-    }   */
+    }   
 },{
     freezeTableName: true,
     timestamps: true
@@ -59,9 +59,9 @@ router.post('/submit_patient_detail',function(req,res){
         unit_of_blood: databody.unit_of_blood,
         city: databody.city,
         //prescription: databody.prescription,
-        //cost: databody.cost
+        cost: databody.cost
     }).then(function(){
-        res.send("data saved");
+        res.send("Your request has been successfully saved!!!");
     });
 });
 

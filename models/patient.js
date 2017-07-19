@@ -273,7 +273,7 @@ router.post('/update_details',function(req,res){
             user_gender: data_body.user_gender
         }).then(function(signUp){
             console.log("fields updated");
-            res.send(signUp);
+            res.send("Your details have been successfully updated");
         })
     })
 });
