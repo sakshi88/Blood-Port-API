@@ -40,6 +40,10 @@ var patient=connection.seq.define('patient',{
     cost:{
         type: sequelize.FLOAT,
         allowNull: true
+    },
+    email:{
+    	type: sequelize.STRING,
+    	allowNull: false
     }   
 },{
     freezeTableName: true,
@@ -59,10 +63,23 @@ router.post('/submit_patient_detail',function(req,res){
         unit_of_blood: databody.unit_of_blood,
         city: databody.city,
         //prescription: databody.prescription,
-        cost: databody.cost
+        cost: databody.cost,
+        email: databody.email,
     }).then(function(){
         res.send("Your request has been successfully saved!!!");
     });
+});
+
+router.post('/get_patient_data',function(req,res){
+	databody=req.body;
+	patient.findAll({
+		where:{
+			email: databody.email
+		}
+	}).then(function(patient){
+		res.send(patient);
+		console.log(patient);
+	})
 });
 
 module.exports=router;
