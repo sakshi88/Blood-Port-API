@@ -14,15 +14,15 @@ signUp=connection.seq.define('signUp',{
     },
 	user_name:{
 		type:sequelize.STRING,
-		allowNUll:false,
+		allowNUll:true
 	},
 	user_email:{
 		type:sequelize.STRING,
-		allowNUll:false,
+		allowNUll:false
 	},
     user_mobile_no:{
         type:sequelize.STRING,
-        allowNUll:false,
+        allowNUll:false
     },
     user_blood_grp:{
         type: sequelize.STRING,
@@ -30,19 +30,19 @@ signUp=connection.seq.define('signUp',{
     },
     user_dob:{
         type:sequelize.DATEONLY,
-        allowNUll:false
+        allowNUll:true
     },
     user_gender:{
         type:sequelize.STRING,
-        allowNUll:false
+        allowNUll:true
     },
     user_password:{
         type:sequelize.STRING,
-        allowNUll:false,
+        allowNUll:true
     },
     user_confirm_password:{
         type:sequelize.STRING,
-        allowNUll:false,
+        allowNUll:true,
     }
 },
 {
@@ -59,7 +59,7 @@ router.post('/check',function(req,res){
     data_body=req.body;
     signUp.find({
         where:{
-          user_email:data_body.user_email  
+          user_mobile_no: data_body.user_mobile_no 
         }
     }).then((signUp)=>{
         if(signUp)
@@ -124,7 +124,7 @@ router.post('/login_user',function(req,res){
     data_body=req.body;
     signUp.find({
         where:{
-            user_email: data_body.user_email
+            user_mobile_no: data_body.user_mobile_no
         }
     }).then(function(signUp){
         if(signUp)
@@ -246,7 +246,7 @@ router.post('/get_details',function(req,res){
 
     signUp.find({
         where:{
-            user_email: data_body.user_email
+            user_mobile_no: data_body.user_mobile_no
         }
     }).then(function(signUp){
         console.log(signUp);
@@ -259,10 +259,10 @@ router.post('/update_details',function(req,res){
 
     signUp.find({
         where: {
-            user_email: data_body.user_email
+            user_mobile_no: data_body.user_mobile_no
         }
     }).then(function(signUp){
-        console.log("updating details of "+data_body.user_email+" user");
+        console.log("updating details of "+data_body.user_mobile_no+" user");
 
         signUp.update({
             user_name: data_body.user_name,
@@ -277,5 +277,55 @@ router.post('/update_details',function(req,res){
         })
     })
 });
+
+router.post('/modal_submit',function(req,res){
+    data_body=req.body;
+    signUp.find({
+        where:{
+            user_mobile_no:data_body.user_mobile_no
+        }
+    }).then((signUp)=>{
+        if(signUp)
+        {
+            console.log(signUp);
+            res.send("User exists");
+        }
+        else
+        {   
+            console.log(signUp);
+            signUp.create({
+                user_mobile_no: data_body.user_mobile_no,
+                user_email: data_body.user_email,
+                user_blood_grp: data_body.user_blood_grp
+            }).then(function(signUp){
+                res.send("Details submitted");
+            })
+        }
+    })
+    
+})
+
+router.post('/update_modal_details',function(req,res){
+    data_body=req.body;
+
+    signUp.find({
+        where:{
+            user_mobile_no: data_body.user_mobile_no
+        }
+    }).then(function(signUp){
+        console.log('user found');
+
+        signUp.update({
+            user_name: data_body.user_name,
+            user_dob: data_body.user_dob,
+            user_gender: data_body.user_gender,
+            user_password: data_body.user_password,
+            user_confirm_password: data_body.user_password
+        }).then(function(signUp){
+            console.log("updt details");
+            res.send("Your details have been successfully updated");
+        })
+    })
+})
 
 module.exports=router;

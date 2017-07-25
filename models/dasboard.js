@@ -39,9 +39,9 @@ var patient=connection.seq.define('patient',{
     */
     cost:{
         type: sequelize.FLOAT,
-        allowNull: true
+        allowNull: false
     },
-    email:{
+    mobile_no:{
     	type: sequelize.STRING,
     	allowNull: false
     }   
@@ -64,7 +64,7 @@ router.post('/submit_patient_detail',function(req,res){
         city: databody.city,
         //prescription: databody.prescription,
         cost: databody.cost,
-        email: databody.email,
+        mobile_no: databody.mobile_no,
     }).then(function(){
         res.send("Your request has been successfully saved!!!");
     });
@@ -74,7 +74,7 @@ router.post('/get_patient_data',function(req,res){
 	databody=req.body;
 	patient.findAll({
 		where:{
-			email: databody.email
+			mobile_no: databody.mobile_no
 		}
 	}).then(function(patient){
 		res.send(patient);
