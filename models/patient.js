@@ -14,35 +14,35 @@ signUp=connection.seq.define('signUp',{
     },
 	user_name:{
 		type:sequelize.STRING,
-		allowNUll:true
+		allowNull:true
 	},
 	user_email:{
 		type:sequelize.STRING,
-		allowNUll:false
+		allowNull:false
 	},
     user_mobile_no:{
         type:sequelize.STRING,
-        allowNUll:false
+        allowNull:false
     },
     user_blood_grp:{
         type: sequelize.STRING,
-        allowNUll: false
+        allowNull: false
     },
     user_dob:{
         type:sequelize.DATEONLY,
-        allowNUll:true
+        allowNull:true
     },
     user_gender:{
         type:sequelize.STRING,
-        allowNUll:true
+        allowNull:true
     },
     user_password:{
         type:sequelize.STRING,
-        allowNUll:true
+        allowNull:true
     },
     user_confirm_password:{
         type:sequelize.STRING,
-        allowNUll:true,
+        allowNull:true,
     }
 },
 {
@@ -284,20 +284,20 @@ router.post('/modal_submit',function(req,res){
         where:{
             user_mobile_no:data_body.user_mobile_no
         }
-    }).then((signUp)=>{
-        if(signUp)
+    }).then((response)=>{
+        if(response)
         {
-            console.log(signUp);
+            console.log(response);
             res.send("User exists");
         }
         else
         {   
-            console.log(signUp);
+            console.log(response);
             signUp.create({
                 user_mobile_no: data_body.user_mobile_no,
                 user_email: data_body.user_email,
                 user_blood_grp: data_body.user_blood_grp
-            }).then(function(signUp){
+            }).then(function(){
                 res.send("Details submitted");
             })
         }
