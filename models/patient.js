@@ -278,7 +278,7 @@ router.post('/update_details',function(req,res){
     })
 });
 
-router.post('/modal_submit',function(req,res){
+router.post('/modal_check',function(req,res){
     data_body=req.body;
     signUp.find({
         where:{
@@ -293,16 +293,22 @@ router.post('/modal_submit',function(req,res){
         else
         {   
             console.log(response);
-            signUp.create({
-                user_mobile_no: data_body.user_mobile_no,
-                user_email: data_body.user_email,
-                user_blood_grp: data_body.user_blood_grp
-            }).then(function(){
-                res.send("Details submitted");
-            })
+            res.send("new user");
         }
     })
     
+})
+
+router.post('/emergency_submit',function(req,res){
+    data_body=req.body;
+
+    signUp.create({
+        user_mobile_no: data_body.user_mobile_no,
+        user_email: data_body.user_email,
+        user_blood_grp: data_body.user_blood_grp
+    }).then(function(response){
+        res.send("user added");
+    })
 })
 
 router.post('/update_modal_details',function(req,res){

@@ -1234,4 +1234,28 @@ router.get('/all_hospitals', (request, response) => {
         });
 });
 
+/****** Route for fetching hospitals of a given location******/
+
+router.post('/sortByLocationDelhi',function(req,res){
+    data_body=req.body;
+    hospitals.findAll({
+        where:{
+            $or:[{city:"Central Delhi"},{city:"South Delhi"},{city:"South West delhi"},{city:"North East Delhi"},{city:"North Delhi"},{city:"North West Delhi"},{city:"West Delhi"},{city:"East Delhi"}]
+        }
+    }).then((resp)=>{
+        console.log("got it");
+        res.send(resp);
+    })
+})
+
+router.post('/sortByLocationNCR',function(req,res){
+    hospitals.findAll({
+        where:{
+            $or:[{city:'Gurgaon'},{city:'Faridabad'}]
+        }
+    }).then((resp)=>{
+        res.send(resp);
+    })
+})
+
 module.exports = router;
