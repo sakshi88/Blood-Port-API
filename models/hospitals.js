@@ -1258,4 +1258,14 @@ router.post('/sortByLocationNCR',function(req,res){
     })
 })
 
+router.post('/sortByName',function(req,res){
+    data_body=req.body;
+    hospitals.find({
+        where:{
+            hospital_name:data_body.hospital_name
+        }
+    }).then((resp)=>{
+        res.send(resp);
+    })
+})
 module.exports = router;

@@ -54,7 +54,7 @@ signUp=connection.seq.define('signUp',{
 
 signUp.sync();
 
-//for Checking whether email existes in db 
+//for Checking whether email exists in db 
 router.post('/check',function(req,res){
     data_body=req.body;
     signUp.find({
@@ -92,16 +92,16 @@ router.post('/signup',(req,res)=>{
         var transporter=nodemailer.createTransport({
             service:'Gmail',
             auth:{
-            user:'shourya301996@gmail.com',
-            pass:'secureme'
+            user:'Bloodporttech@gmail.com',
+            pass:'Rohan@123'
             }
         });
 
          var mailOptions={
-            from:'shourya301996@gmail.com',
+            from:'Bloodporttech@gmail.com',
             to:data_body.user_email,
             subject:'Mail from Bloodport for successful signup',
-            html:'<h1>Hello User, You have been registered with Bloodport</h1>'
+            html:'Hello '+data_body.user_name+", " +"You have been successfully registered with BloodPORT."
             };
                 
         transporter.sendMail(mailOptions,function(error,info){
@@ -132,7 +132,7 @@ router.post('/login_user',function(req,res){
             if(signUp.user_password==data_body.user_password)
             {   
                 res.send("true");
-                console.log("you are logged in");
+                
             }
             else
             {
@@ -161,16 +161,16 @@ router.post('/forgotpassword',function(req,res){
             var transporter= nodemailer.createTransport({
                 service: 'Gmail',
                 auth:{
-                    user: 'shourya301996@gmail.com',
-                    pass: 'secureme'
+                    user: 'Bloodporttech@gmail.com',
+                    pass: 'Rohan@123'
                 }
             });
 
             var mailOptions= {
-                from: 'shourya301996@gmail.com',
+                from: 'Bloodporttech@gmail.com',
                 to: data_body.user_email,
                 subject: 'Mail to change your BloodPort password',
-                text: 'Hello user, change the password. the link is-http://localhost:8000/updatepassword.html#!/update_password'
+                html: 'Hello '+signUp.user_name+", Your old password for BloodPORT is :"+signUp.user_password+"<br><h3>Please change your password to be more secure.</h3>"
             };
 
             transporter.sendMail(mailOptions,function(err,success){
@@ -192,7 +192,7 @@ router.post('/forgotpassword',function(req,res){
 });
 
 //when the user wants to update his password
-router.post('/updatePassword',function(req,res){
+/*router.post('/updatePassword',function(req,res){
     data_body=req.body;
     if(data_body.user_password==data_body.user_confirm_password)
     {
@@ -236,7 +236,7 @@ router.post('/updatePassword',function(req,res){
     {
         res.send("Passwords don't match");
     }
-})
+})*/
 
 
 //api for user profile section
