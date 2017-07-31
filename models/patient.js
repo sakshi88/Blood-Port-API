@@ -18,7 +18,7 @@ signUp=connection.seq.define('signUp',{
 	},
 	user_email:{
 		type:sequelize.STRING,
-		allowNull:false
+		allowNull:true
 	},
     user_mobile_no:{
         type:sequelize.STRING,
@@ -26,7 +26,7 @@ signUp=connection.seq.define('signUp',{
     },
     user_blood_grp:{
         type: sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
     user_dob:{
         type:sequelize.DATEONLY,
@@ -256,7 +256,7 @@ router.post('/get_details',function(req,res){
 
 router.post('/update_details',function(req,res){
     data_body=req.body;
-
+    console.log("req is "+req.body.user_email);
     signUp.find({
         where: {
             user_mobile_no: data_body.user_mobile_no
