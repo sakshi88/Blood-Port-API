@@ -1,5 +1,5 @@
 var sequelize= require('sequelize'),
-    seq=new sequelize('scrapp','root','mittalsm',{
+    seq=new sequelize('bport','root','sakshi',{
         host: 'localhost',
         dialect: 'mysql',
         pool:{

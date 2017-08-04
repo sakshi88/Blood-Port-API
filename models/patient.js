@@ -92,8 +92,8 @@ router.post('/signup',(req,res)=>{
         var transporter=nodemailer.createTransport({
             service:'Gmail',
             auth:{
-            user:'Bloodporttech@gmail.com',
-            pass:'Rohan@123'
+                user:'Bloodporttech@gmail.com',
+                pass:'Rohan@123'
             }
         });
 
@@ -118,6 +118,52 @@ router.post('/signup',(req,res)=>{
     })   
 });
 
+//for emergency user and social signup
+
+router.post('/specialSignUp',function(request,response){
+    data_body= request.body;
+
+    signUp.create({
+        user_name: data_body.user_name,
+        user_email: data_body.user_email,
+        user_mobile_no: data_body.user_mobile_no,
+        user_blood_grp: data_body.user_blood_grp,
+        user_password: data_body.user_pass,
+        user_confirm_password: data_body.user_pass,
+        user_gender: data_body.user_gender
+    }).then(function(signUp){
+        var transporter=nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user:'Bloodporttech@gmail.com',
+                pass:'Rohan@123'
+            }
+        });
+
+        var mailOptions={
+            from: 'Bloodporttech@gmail.com',
+            to: data_body.user_email,
+            subject:'Mail from Bloodport for successful signup',
+            html:'Hello '+data_body.user_name+", " +"You have been successfully registered with BloodPORT.\n Your password is-"+ data_body.user_pass
+        };
+
+        transporter.sendMail(mailOptions,function(err,info){
+            if(err)
+            {
+                console.log(err);
+            }
+            else
+            {
+                console.log("mail sent");
+            }
+        });
+        
+        response.send("You have been successfully registered to BloodPORT");
+    })
+
+    
+    
+})
 
 //for log in the user
 router.post('/login_user',function(req,res){
@@ -305,9 +351,39 @@ router.post('/emergency_submit',function(req,res){
     signUp.create({
         user_mobile_no: data_body.user_mobile_no,
         user_email: data_body.user_email,
-        user_blood_grp: data_body.user_blood_grp
+        user_blood_grp: data_body.user_blood_grp,
+        user_password: data_body.user_pass,
+        user_confirm_password: data_body.user_pass
     }).then(function(response){
         res.send("user added");
+
+        var transporter=nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user:'Bloodporttech@gmail.com',
+                pass:'Rohan@123'   
+            }
+        });
+
+        var mailOptions={
+            from: 'Bloodporttech@gmail.com',
+            to: data_body.user_email,
+            subject:'Mail from Bloodport for successful signup',
+            html:'Hello '+data_body.user_name+", " +"You have been successfully registered with BloodPORT.\n Your password is-"+ data_body.user_pass 
+        };
+
+        transporter.sendMail(mailOptions,function(err,info){
+            if(err)
+            {
+                console.log(err);
+            }
+            else
+            {
+                console.log('mail sent');
+            }
+        })
+
+        res.send("You have been successfully registered to BloodPORT");
     })
 })
 
@@ -324,9 +400,7 @@ router.post('/update_modal_details',function(req,res){
         signUp.update({
             user_name: data_body.user_name,
             user_dob: data_body.user_dob,
-            user_gender: data_body.user_gender,
-            user_password: data_body.user_password,
-            user_confirm_password: data_body.user_password
+            user_gender: data_body.user_gender
         }).then(function(signUp){
             console.log("updt details");
             res.send("Your details have been successfully updated");
