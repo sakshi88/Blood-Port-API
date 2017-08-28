@@ -32,11 +32,11 @@ var patient=connection.seq.define('patient',{
         allowNull: false
     },
     
-    /*prescription:{
-        //allowNull: false,
+    upload:{
+        allowNull: false,
         type: sequelize.BLOB('long')
     },
-    */
+    
     cost:{
         type: sequelize.FLOAT,
         allowNull: false
@@ -62,7 +62,7 @@ router.post('/submit_patient_detail',function(req,res){
         hospital: databody.hospital,
         unit_of_blood: databody.unit_of_blood,
         city: databody.city,
-        //prescription: databody.prescription,
+        upload: databody.upload,
         cost: databody.cost,
         mobile_no: databody.mobile_no,
     }).then(function(){
